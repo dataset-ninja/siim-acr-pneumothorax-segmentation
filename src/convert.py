@@ -1,10 +1,10 @@
+import csv
 import supervisely as sly
 import os
 from dataset_tools.convert import unpack_if_archive
 import src.settings as s
 from urllib.parse import unquote, urlparse
-from supervisely.io.fs import get_file_name, get_file_size
-import shutil
+from supervisely.io.fs import get_file_name, get_file_name_with_ext
 
 from tqdm import tqdm
 
@@ -70,16 +70,85 @@ def convert_and_upload_supervisely_project(
     api: sly.Api, workspace_id: int, project_name: str
 ) -> sly.ProjectInfo:
     ### Function should read local dataset and upload it to Supervisely project, then return project info.###
-    raise NotImplementedError("The converter should be implemented manually.")
+    images_path = os.path.join("siim-acr-pneumothorax","png_images")
+    masks_path = os.path.join("siim-acr-pneumothorax","png_masks")
+    train_csv_path = os.path.join("siim-acr-pneumothorax","stage_1_train_images.csv")
+    test_csv_path = os.path.join("siim-acr-pneumothorax","stage_1_test_images.csv")
+    batch_size = 30
 
-    # dataset_path = "/local/path/to/your/dataset" # general way
-    # dataset_path = download_dataset(teamfiles_dir) # for large datasets stored on instance
+    img_height = 1024
+    img_wight = 1024
 
-    # ... some code here ...
 
-    # sly.logger.info('Deleting temporary app storage files...')
-    # shutil.rmtree(storage_dir)
+    def create_ann(image_path):
+        labels = []
 
-    # return project
+        image_name = get_file_name_with_ext(image_path)
+
+        image_data = images_data[image_name]
+        image_id = sly.Tag(tag_image_id, value=image_data[0])
+        pneumo_value = value_to_pneumo[image_data[1]]
+        pneumo = sly.Tag(tag_image_id, value=pneumo_value)
+
+        mask_path = os.path.join(masks_path, image_name)
+        mask_np = sly.imaging.image.read(mask_path)[:, :, 0]
+
+        mask = mask_np == 255
+        curr_bitmap = sly.Bitmap(mask)
+        curr_label = sly.Label(curr_bitmap, obj_class)
+        labels.append(curr_label)
+
+        return sly.Annotation(
+            img_size=(img_height, img_wight), labels=labels, img_tags=[image_id, pneumo]
+        )
+
+
+    obj_class = sly.ObjClass("pneumothorax", sly.Bitmap)
+
+    tag_image_id = sly.TagMeta("image id", sly.TagValueType.ANY_STRING)
+    tag_pneumo = sly.TagMeta("has pneumo", sly.TagValueType.ANY_STRING)
+
+    value_to_pneumo = {"0": "False", "1": "True"}
+
+
+    project = api.project.create(workspace_id, project_name, change_name_if_conflict=True)
+    meta = sly.ProjectMeta(obj_classes=[obj_class], tag_metas=[tag_image_id, tag_pneumo])
+    api.project.update_meta(project.id, meta.to_json())
+
+    train_split = {}
+    with open(train_csv_path, "r") as file:
+        csvreader = csv.reader(file)
+        for idx, row in enumerate(csvreader):
+            if idx != 0:
+                train_split[row[0]] = (row[1], row[2])
+
+    test_split = {}
+    with open(test_csv_path, "r") as file:
+        csvreader = csv.reader(file)
+        for idx, row in enumerate(csvreader):
+            if idx != 0:
+                test_split[row[0]] = (row[1], row[2])
+
+    ds_name_to_data = {"train": train_split, "test": test_split}
+
+    for ds_name, images_data in ds_name_to_data.items():
+        images_names = list(images_data.keys())
+
+        dataset = api.dataset.create(project.id, ds_name, change_name_if_conflict=True)
+
+        progress = sly.Progress("Create dataset {}".format(ds_name), len(images_names))
+
+        for img_names_batch in sly.batched(images_names, batch_size=batch_size):
+            images_pathes_batch = [
+                os.path.join(images_path, image_name) for image_name in img_names_batch
+            ]
+
+            img_infos = api.image.upload_paths(dataset.id, img_names_batch, images_pathes_batch)
+            img_ids = [im_info.id for im_info in img_infos]
+
+            anns_batch = [create_ann(image_path) for image_path in images_pathes_batch]
+            api.annotation.upload_anns(img_ids, anns_batch)
+
+            progress.iters_done_report(len(img_names_batch))
 
 
