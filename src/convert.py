@@ -1,12 +1,15 @@
 import csv
-import supervisely as sly
 import os
-from dataset_tools.convert import unpack_if_archive
-import src.settings as s
 from urllib.parse import unquote, urlparse
-from supervisely.io.fs import get_file_name, get_file_name_with_ext
 
+import numpy as np
+import supervisely as sly
+from dataset_tools.convert import unpack_if_archive
+from supervisely.io.fs import get_file_name, get_file_name_with_ext
 from tqdm import tqdm
+
+import src.settings as s
+
 
 def download_dataset(teamfiles_dir: str) -> str:
     """Use it for large datasets to convert them on the instance"""
@@ -74,7 +77,7 @@ def convert_and_upload_supervisely_project(
     masks_path = os.path.join("siim-acr-pneumothorax","png_masks")
     train_csv_path = os.path.join("siim-acr-pneumothorax","stage_1_train_images.csv")
     test_csv_path = os.path.join("siim-acr-pneumothorax","stage_1_test_images.csv")
-    batch_size = 30
+    batch_size = 10
 
     img_height = 1024
     img_wight = 1024
@@ -82,21 +85,21 @@ def convert_and_upload_supervisely_project(
 
     def create_ann(image_path):
         labels = []
-
         image_name = get_file_name_with_ext(image_path)
-
         image_data = images_data[image_name]
         image_id = sly.Tag(tag_image_id, value=image_data[0])
         pneumo_value = value_to_pneumo[image_data[1]]
-        pneumo = sly.Tag(tag_image_id, value=pneumo_value)
-
+        if pneumo_value != "False":
+            pneumo = sly.Tag(tag_pneumo_positive)
+        else:
+            pneumo = sly.Tag(tag_pneumo_negative)
         mask_path = os.path.join(masks_path, image_name)
         mask_np = sly.imaging.image.read(mask_path)[:, :, 0]
-
         mask = mask_np == 255
-        curr_bitmap = sly.Bitmap(mask)
-        curr_label = sly.Label(curr_bitmap, obj_class)
-        labels.append(curr_label)
+        if len(np.unique(mask))>1:
+            curr_bitmap = sly.Bitmap(mask)
+            curr_label = sly.Label(curr_bitmap, obj_class)
+            labels.append(curr_label)
 
         return sly.Annotation(
             img_size=(img_height, img_wight), labels=labels, img_tags=[image_id, pneumo]
@@ -106,13 +109,15 @@ def convert_and_upload_supervisely_project(
     obj_class = sly.ObjClass("pneumothorax", sly.Bitmap)
 
     tag_image_id = sly.TagMeta("image id", sly.TagValueType.ANY_STRING)
-    tag_pneumo = sly.TagMeta("has pneumo", sly.TagValueType.ANY_STRING)
+    tag_pneumo_positive = sly.TagMeta("pneumo_positive", sly.TagValueType.NONE)
+    tag_pneumo_negative = sly.TagMeta("pneumo_negative", sly.TagValueType.NONE)
+
 
     value_to_pneumo = {"0": "False", "1": "True"}
 
 
     project = api.project.create(workspace_id, project_name, change_name_if_conflict=True)
-    meta = sly.ProjectMeta(obj_classes=[obj_class], tag_metas=[tag_image_id, tag_pneumo])
+    meta = sly.ProjectMeta(obj_classes=[obj_class], tag_metas=[tag_image_id, tag_pneumo_positive, tag_pneumo_negative])
     api.project.update_meta(project.id, meta.to_json())
 
     train_split = {}
@@ -151,4 +156,4 @@ def convert_and_upload_supervisely_project(
 
             progress.iters_done_report(len(img_names_batch))
 
-
+    return project
