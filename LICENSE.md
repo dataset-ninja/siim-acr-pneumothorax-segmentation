@@ -1,0 +1,1 @@
+License is unknown for the SIIM-ACR Pneumothorax Segmentation 2019 dataset.
