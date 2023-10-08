@@ -1,4 +1,4 @@
-**SIIM-ACR Pneumothorax Segmentation 2019** is a dataset for a semantic segmentation task. It is used in the medical industry, and in the medical research. 
+**SIIM-ACR Pneumothorax Segmentation 2019** is a dataset for semantic segmentation and classification tasks. It is used in the medical industry, and in the medical research. 
 
 The dataset consists of 12047 images with 2669 labeled objects belonging to 1 single class (*pneumothorax*).
 
