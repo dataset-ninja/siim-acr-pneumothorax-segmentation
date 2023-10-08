@@ -21,17 +21,22 @@ HIDE_DATASET = True  # set False when 100% sure about repo quality
 # * After uploading to instance ##
 ##################################
 LICENSE: License = License.Unknown()
-APPLICATIONS: List[Union[Industry, Domain, Research]] = [Industry.Medical(), Research.Medical()]
+APPLICATIONS: List[Union[Industry, Domain, Research]] = [
+    Industry.Medical(),
+    Research.Medical(),
+]
 CATEGORY: Category = Category.Medical()
 
-CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation()]
+CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation(), CVTask.Classification()]
 ANNOTATION_TYPES: List[AnnotationType] = [CVTask.SemanticSegmentation()]
 
 RELEASE_DATE: Optional[str] = "2019-01-25"  # e.g. "YYYY-MM-DD"
 if RELEASE_DATE is None:
     RELEASE_YEAR: int = None
 
-HOMEPAGE_URL: str = "https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/"
+HOMEPAGE_URL: str = (
+    "https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/"
+)
 # e.g. "https://some.com/dataset/homepage"
 
 PREVIEW_IMAGE_ID: int = 6804431
@@ -43,7 +48,9 @@ GITHUB_URL: str = "https://github.com/dataset-ninja/siim-acr-pneumothorax-segmen
 ##################################
 ### * Optional after uploading ###
 ##################################
-DOWNLOAD_ORIGINAL_URL: Optional[Union[str, dict]] = "https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/"
+DOWNLOAD_ORIGINAL_URL: Optional[
+    Union[str, dict]
+] = "https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/"
 # Optional link for downloading original dataset (e.g. "https://some.com/dataset/download")
 
 CLASS2COLOR: Optional[Dict[str, List[str]]] = None
@@ -56,13 +63,25 @@ BLOGPOST: Optional[Union[str, List[str], Dict[str, str]]] = None
 REPOSITORY: Optional[Union[str, List[str], Dict[str, str]]] = None
 
 CITATION_URL: Optional[str] = None
-AUTHORS: Optional[List[str]] = ["Anna Zawacki", "Carol Wu", "George Shih", "Julia Elliott", "Mikhail Fomitchev", "Mohannad Hussain", "Paras Lakhani", "Phil Culliton", "Shunxing Bao"]
+AUTHORS: Optional[List[str]] = [
+    "Anna Zawacki",
+    "Carol Wu",
+    "George Shih",
+    "Julia Elliott",
+    "Mikhail Fomitchev",
+    "Mohannad Hussain",
+    "Paras Lakhani",
+    "Phil Culliton",
+    "Shunxing Bao",
+]
 
 ORGANIZATION_NAME: Optional[Union[str, List[str]]] = None
 ORGANIZATION_URL: Optional[Union[str, List[str]]] = None
 
 # Set '__PRETEXT__' or '__POSTTEXT__' as a key with string value to add custom text. e.g. SLYTAGSPLIT = {'__POSTTEXT__':'some text}
-SLYTAGSPLIT: Optional[Dict[str, Union[List[str], str]]] = {"__POSTTEXT__":"Also, the dataset contains ***image id*** and ***pneumo_positive***, ***pneumo_negative*** tags"}
+SLYTAGSPLIT: Optional[Dict[str, Union[List[str], str]]] = {
+    "__POSTTEXT__": "Also, the dataset contains ***image id*** and ***pneumo_positive***, ***pneumo_negative*** tags"
+}
 TAGS: Optional[List[str]] = None
 
 
@@ -76,7 +95,9 @@ SECTION_EXPLORE_CUSTOM_DATASETS: Optional[List[str]] = None
 def check_names():
     fields_before_upload = [PROJECT_NAME]  # PROJECT_NAME_FULL
     if any([field is None for field in fields_before_upload]):
-        raise ValueError("Please fill all fields in settings.py before uploading to instance.")
+        raise ValueError(
+            "Please fill all fields in settings.py before uploading to instance."
+        )
 
 
 def get_settings():
@@ -100,7 +121,9 @@ def get_settings():
     }
 
     if any([field is None for field in settings.values()]):
-        raise ValueError("Please fill all fields in settings.py after uploading to instance.")
+        raise ValueError(
+            "Please fill all fields in settings.py after uploading to instance."
+        )
 
     settings["release_date"] = RELEASE_DATE
     settings["download_original_url"] = DOWNLOAD_ORIGINAL_URL
