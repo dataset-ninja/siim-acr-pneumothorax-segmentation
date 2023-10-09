@@ -1,2 +1,10 @@
-ADD CUSTOM LICENSE MANUALLY
+## COMPETITION DATA.
+"Competition Data" means the data or datasets available from or referenced by the Competition Website for the purpose of use in the Competition, including any prototype or executable code provided on or referenced by the Competition Website. The Competition Data will contain private and public test sets. Which data belongs to which set will not be made available to participants.
+
+A. <i>Data Access and Use.</i> You may access and use the Competition Data for any purpose, whether commercial or non-commercial, including for participating in the Competition and on Kaggle.com forums, and for academic research and education. The Competition Sponsor reserves the right to disqualify any participant who uses the Competition Data other than as permitted by the Competition Website and these Rules.
+
+B. <i>Data Security.</i> You agree to use reasonable and suitable measures to prevent persons who have not formally agreed to these Rules from gaining access to the Competition Data. You agree not to transmit, duplicate, publish, redistribute or otherwise provide or make available the Competition Data to any party not participating in the Competition. You agree to notify Kaggle immediately upon learning of any possible unauthorized transmission of or unauthorized access to the Competition Data and agree to work with Kaggle to rectify any unauthorized transmission or access.
+
+C. <i>External Data.</i> You may use data other than the Competition Data (“External Data”) to develop and test your models and Submissions. However, you will (i) ensure the External Data is available to use by all participants of the competition for purposes of the competition at no cost to the other participants and (ii) post such access to the External Data for the participants to the official competition forum prior to the Entry Deadline.
+
 [Source](https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/rules)
