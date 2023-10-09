@@ -4,13 +4,4 @@ Pneumothorax, a condition where air accumulates in the space between the lung an
 
 This challenge aims to harness the power of artificial intelligence to aid in the early and accurate diagnosis of pneumothorax, which is typically confirmed by radiologists through chest X-rays. Detecting pneumothorax can be challenging, and an effective AI algorithm could have widespread clinical applications. It could help prioritize the interpretation of chest radiographs, provide more confident diagnoses, and potentially save lives.
 
-The Society for Imaging Informatics in Medicine (SIIM), a prominent healthcare organization dedicated to advancing medical imaging informatics, is leading this initiative. They seek to leverage the expertise of data scientists and researchers to address this crucial medical challenge.
-
-In this competition, participants are tasked with developing a model that can classify the presence of pneumothorax in a set of chest radiographic images. Furthermore, successful models should not only classify but also segment the pneumothorax, indicating its location and extent using masks. The encoding of these masks should follow the Run-Length Encoding (RLE) format.
-
-By participating in this challenge, individuals have the opportunity to contribute to the early recognition of pneumothoraces, potentially improving patient outcomes and enhancing medical diagnosis and treatment.
-
-Authors are attempting to 
-- predict the existence of pneumothorax in test images
-- indicate the location and extent of the condition using masks. 
-
+Authors are striving to achieve two primary objectives: firstly, to forecast the presence of pneumothorax within test images, and secondly, to delineate both the precise location and the extent of this medical condition through the use of masks.
