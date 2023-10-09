@@ -23,7 +23,6 @@ HIDE_DATASET = True  # set False when 100% sure about repo quality
 LICENSE: License = License.Unknown()
 APPLICATIONS: List[Union[Industry, Domain, Research]] = [
     Industry.Medical(),
-    Research.Medical(),
 ]
 CATEGORY: Category = Category.Medical()
 
@@ -75,11 +74,12 @@ AUTHORS: Optional[List[str]] = [
     "Shunxing Bao",
 ]
 
-ORGANIZATION_NAME: Optional[Union[str, List[str]]] = None
-ORGANIZATION_URL: Optional[Union[str, List[str]]] = None
+ORGANIZATION_NAME: Optional[Union[str, List[str]]] = ["The Society for Imaging Informatics in Medicine (SIIM)"]
+ORGANIZATION_URL: Optional[Union[str, List[str]]] = ["https://siim.org/"]
 
 # Set '__PRETEXT__' or '__POSTTEXT__' as a key with string value to add custom text. e.g. SLYTAGSPLIT = {'__POSTTEXT__':'some text}
 SLYTAGSPLIT: Optional[Dict[str, Union[List[str], str]]] = {
+    "classification sets":["pneumo_positive", "pneumo_negative"],
     "__POSTTEXT__": "Also, the dataset contains ***image id*** and ***pneumo_positive***, ***pneumo_negative*** tags"
 }
 TAGS: Optional[List[str]] = None
