@@ -1,1 +1,2 @@
-License is unknown for the SIIM-ACR Pneumothorax Segmentation 2019 dataset.
+ADD CUSTOM LICENSE MANUALLY
+[Source](https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/rules)
