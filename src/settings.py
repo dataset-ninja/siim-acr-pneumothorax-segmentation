@@ -20,7 +20,7 @@ HIDE_DATASET = False  # set False when 100% sure about repo quality
 ##################################
 # * After uploading to instance ##
 ##################################
-LICENSE: License = License.Custom(url="https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/rules")
+LICENSE: License = License.Custom(url="https://www.kaggle.com/competitions/siim-acr-pneumothorax-segmentation/rules", redistributable=False)
 APPLICATIONS: List[Union[Industry, Domain, Research]] = [
     Industry.Medical(),
 ]
