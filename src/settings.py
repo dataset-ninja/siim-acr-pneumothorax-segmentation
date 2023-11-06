@@ -73,13 +73,14 @@ AUTHORS: Optional[List[str]] = [
     "Phil Culliton",
     "Shunxing Bao",
 ]
+AUTHORS_CONTACTS: Optional[List[str]] = ["info@siim.org", "https://www.linkedin.com/in/anna-zawacki-99a3b719/", "https://www.kaggle.com/juliaelliott"]
 
 ORGANIZATION_NAME: Optional[Union[str, List[str]]] = ["The Society for Imaging Informatics in Medicine (SIIM)"]
 ORGANIZATION_URL: Optional[Union[str, List[str]]] = ["https://siim.org/"]
 
 # Set '__PRETEXT__' or '__POSTTEXT__' as a key with string value to add custom text. e.g. SLYTAGSPLIT = {'__POSTTEXT__':'some text}
 SLYTAGSPLIT: Optional[Dict[str, Union[List[str], str]]] = {
-    "classification sets":["pneumo_positive", "pneumo_negative"],
+    "classification image sets":["pneumo_positive", "pneumo_negative"],
     "__POSTTEXT__": "Also, the dataset contains ***image id*** and ***pneumo_positive***, ***pneumo_negative*** tags"
 }
 TAGS: Optional[List[str]] = None
@@ -133,6 +134,7 @@ def get_settings():
     settings["repository"] = REPOSITORY
     settings["citation_url"] = CITATION_URL
     settings["authors"] = AUTHORS
+    settings["authors_contacts"] = AUTHORS_CONTACTS
     settings["organization_name"] = ORGANIZATION_NAME
     settings["organization_url"] = ORGANIZATION_URL
     settings["slytagsplit"] = SLYTAGSPLIT
